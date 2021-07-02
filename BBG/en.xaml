@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="welcome_title">Welcome to baka_mashiro's Block Generator Pro</sys:String>
+    <sys:String x:Key="welcome_youcan">You can：</sys:String>
+    <sys:String x:Key="welcome_start">Create map painting right now!</sys:String>
+    <sys:String x:Key="welcome_start_tt">Click to Create a map painting</sys:String>
+    <sys:String x:Key="welcome_know_more">Guidance &amp; Learn more</sys:String>
+    <sys:String x:Key="welcome_know_more_tt">Go to the official website</sys:String>
+</ResourceDictionary>

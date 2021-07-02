@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BBG
 {
-    class Schematic
+   public class Schematic
     {
         List<string> blockPalette = new List<string>();
         List<byte> blockMetadata = new List<byte>();
@@ -129,6 +129,7 @@ namespace BBG
 
         public void Save()
         {
+            Generate();
             document.Save(@"D:\newbddld\1.16.5-fabric\1.16.5-fabric\1.16.5\[光影版本]XPlus 2.0 for 1.16.5整合包-fabric-20210127\.minecraft\config\worldedit\schematics\ts.schem");
         }
 
@@ -138,10 +139,9 @@ namespace BBG
             {
                 if (Directory.Exists(path))
                 {
+                    Generate();
                     document.Save(path);
                 }
-                document.Save(path);
-
             }
             else
             {
@@ -248,6 +248,6 @@ namespace BBG
             }
         }
 
-
+      
     }
 }

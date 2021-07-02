@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="BBG.ColorDemo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BBG"
+             mc:Ignorable="d"
+             d:DesignHeight="64"
+             d:DesignWidth="800">
+    <Grid Height="64"
+          FlowDirection="LeftToRight"
+          Name="g">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="43" />
+            <ColumnDefinition Width="178" />
+            <ColumnDefinition Width="76" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <CheckBox Margin="15,14,0,10"
+                  RenderTransformOrigin="0.5,0.5"
+                  d:LayoutOverrides="TopMargin, BottomMargin"
+                  HorizontalAlignment="Left"
+                  Name="cb"
+                  IsChecked="True">
+            <CheckBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="2"
+                                    ScaleY="2" />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
+                </TransformGroup>
+            </CheckBox.RenderTransform>
+        </CheckBox>
+        <TextBlock x:Name="color_name"
+                   Text="(#FFFFFF)"
+                   FontSize="35"
+                   Grid.Column="1"
+                   Margin="11.667,10,0,10"
+                   d:LayoutOverrides="TopMargin, BottomMargin"
+                   HorizontalAlignment="Left" />
+        <StackPanel Grid.Column="3"
+                    Orientation="Horizontal"
+                    Name="Image_holder"
+                    Margin="-0.333,0,0,0" />
+        <Image x:Name="demo_block"
+               Grid.Column="2"
+               Margin="0,0,9.667,0"
+               Width="64"
+               Height="64"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               ToolTip="{DynamicResource color_demo_img_tt}"/>
+    </Grid>
+</UserControl>

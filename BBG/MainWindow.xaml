@@ -4,10 +4,128 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BBG"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        Loaded="Window_Loaded">
+        Title="MainWindow"
+        Height="500"
+        Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Loaded="Window_Loaded"
+        MinHeight="500"
+        MinWidth="800">
     <Grid>
-        
+        <!-- the transitioner will manage your transitions. notice how SelectedIndex is set to zero: the first slide (instead of the default of -1) -->
+        <materialDesign:Transitioner SelectedIndex="0"
+                                     AutoApplyTransitionOrigins="True"
+                                     x:Name="MainTransitioner">
+            <!--<materialDesign:Transitioner.InputBindings>
+                <KeyBinding Key="Left"
+                            Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}" />
+                <KeyBinding Key="Right"
+                            Command="{x:Static materialDesign:Transitioner.MoveNextCommand}" />
+            </materialDesign:Transitioner.InputBindings>-->
+            <!-- you can use a slide for each page, let's add a touch of fade for our first page  -->
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <!--<local:Slide1_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+                <Frame x:Name="pg0"></Frame>
+            </materialDesign:TransitionerSlide>
+            <!-- but you can use bare xaml too -->
+            <!--<local:Slide2_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+            <!-- you can control (and create your own) wipes -->
+            <materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide.BackwardWipe>
+                    <materialDesign:CircleWipe />
+                </materialDesign:TransitionerSlide.BackwardWipe>
+                <materialDesign:TransitionerSlide.ForwardWipe>
+                    <materialDesign:SlideWipe Direction="Right" />
+                </materialDesign:TransitionerSlide.ForwardWipe>
+                <!--<local:Slide3_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+                <Frame x:Name="pg1"></Frame>
+            </materialDesign:TransitionerSlide>
+            <!-- now we are going to slide this in by combining some extra effects.  the inner content slides in, so we'll set the outer background and clip, to keep things nice -->
+            <materialDesign:TransitionerSlide ClipToBounds="True">
+                <materialDesign:TransitionerSlide.OpeningEffects>
+                    <materialDesign:TransitionEffect Kind="SlideInFromLeft"
+                                                     Duration="0:0:0.8" />
+                    <materialDesign:TransitionEffect Kind="SlideInFromBottom"
+                                                     Duration="0:0:0.8"
+                                                     OffsetTime="0:0:0.15" />
+                </materialDesign:TransitionerSlide.OpeningEffects>
+                <!--<local:Slide4_CombineTransitions xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+                <Frame x:Name="pg2"></Frame>
+            </materialDesign:TransitionerSlide>
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <!--<local:Slide1_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+                <Frame x:Name="pg3"></Frame>
+            </materialDesign:TransitionerSlide>
+            
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <!--<local:Slide1_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+                <Frame x:Name="pg4"></Frame>
+            </materialDesign:TransitionerSlide>
+            <!--<local:Slide5_TransitioningContent xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />
+            <local:Slide6_Origins xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />
+            <local:Slide7_MVVM xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+        </materialDesign:Transitioner>
+        <materialDesign:DrawerHost x:Name="DrawerHost"
+                                   Margin="0,0,0,0"
+                                   BorderThickness="2"
+                                   BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                   >
+            <materialDesign:DrawerHost.Style>
+                <Style TargetType="materialDesign:DrawerHost"
+                       BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}"></Style>
+            </materialDesign:DrawerHost.Style>
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <StackPanel Margin="16">
+                    <TextBlock Margin="4"
+                               HorizontalAlignment="Center"
+                               Text="{DynamicResource guide_guide}" />
+                    <Button x:Name="guide_start"
+                            Click="guide_start_Click"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Content="{DynamicResource guide_start}" />
+                    <Button x:Name="guide_choose_image_btn"
+                            Click="guide_choose_image_btn_Click"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Content="{DynamicResource guide_choose_image}" />
+                    <Button x:Name="guide_choose_block_btn"
+                            Click="guide_choose_block_btn_Click"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Content="{DynamicResource guide_choose_color}" />
+                    <Button x:Name="guide_generate_btn"
+                            Click="guide_generate_btn_Click"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Content="{DynamicResource guide_generate}" />
+                    <Button x:Name="guide_export_btn"
+                            Click="guide_export_btn_Click"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Content="{DynamicResource guide_export}" />
+                </StackPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <Button x:Name="jjj"
+                    Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                    CommandParameter="{x:Static Dock.Left}"
+                    Content="{materialDesign:PackIcon Kind=Menu}"
+                    HorizontalAlignment="Left"
+                    Width="54"
+                    VerticalAlignment="Bottom"
+                    d:LayoutOverrides="Height" />
+        </materialDesign:DrawerHost>
     </Grid>
 </Window>

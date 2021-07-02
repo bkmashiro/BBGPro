@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="guide_guide">导航</sys:String>
+    <sys:String x:Key="guide_start">开始</sys:String>
+    <sys:String x:Key="guide_choose_image">选择图片</sys:String>
+    <sys:String x:Key="guide_choose_color">选择颜色</sys:String>
+    <sys:String x:Key="guide_generate">生成</sys:String>
+    <sys:String x:Key="guide_export">导出</sys:String>
+    
+    
+    <sys:String x:Key="welcome_title">欢迎使用baka_mashiro's Block Generator Pro</sys:String>
+    <sys:String x:Key="welcome_youcan">您可以：</sys:String>
+    <sys:String x:Key="welcome_start">开始创作地图画！</sys:String>
+    <sys:String x:Key="welcome_start_tt">点击去创作地图画</sys:String>
+    <sys:String x:Key="welcome_know_more">教程/了解更多</sys:String>
+    <sys:String x:Key="welcome_know_more_tt">去BBG Pro的官方页面，了解更多知识。</sys:String>
+    
+    <sys:String x:Key="input_input">导入图片</sys:String>
+    <sys:String x:Key="input_btn">点击导入</sys:String>
+    <sys:String x:Key="input_drop">拖放图片</sys:String>
+    <sys:String x:Key="input_done">选好了！</sys:String>
+    
+    <sys:String x:Key="color_demo_img_tt">该方块将用于预览图中表示该颜色</sys:String>
+    <sys:String x:Key="color_demo_img2_tt">{0}</sys:String>
+    <sys:String x:Key="color_demo_checkbox_tt1">点击来开启颜色{0}</sys:String>
+    <sys:String x:Key="color_demo_checkbox_tt2">点击来关闭颜色{0}</sys:String>
+    <sys:String x:Key="color_hint1">您可能需要缩放窗口来显示全部方块</sys:String>
+    <sys:String x:Key="color_done">选好了！</sys:String>
+    
+    <sys:String x:Key="gen_checkbox">生成</sys:String>
+    <sys:String x:Key="gen_enable_3d">立体地图画：已启用</sys:String>
+    <sys:String x:Key="gen_disable_3d">立体地图画：关闭</sys:String>
+    <sys:String x:Key="gen_color_config">颜色已选择：</sys:String>
+    <sys:String x:Key="gen_goto_color">重新选择颜色</sys:String>
+    <sys:String x:Key="gen_color_count">已启用{0}种颜色</sys:String>
+    <sys:String x:Key="gen_enable_dither">抖动已启用</sys:String>
+    <sys:String x:Key="gen_disable_dither">抖动已关闭</sys:String>
+    <sys:String x:Key="gen_color_space">色彩空间</sys:String>
+    <sys:String x:Key="gen_color_space_hint">建议不改（使用Lab色彩空间）</sys:String>
+    <sys:String x:Key="gen_color_space_lab">使用Lab色彩空间</sys:String>
+    <sys:String x:Key="gen_color_space_rgb">使用RGB色彩空间</sys:String>
+    
+    <sys:String x:Key="gen_advanced_Config">高级设置</sys:String>
+    <sys:String x:Key="gen_dither_type">抖动模式</sys:String>
+    <sys:String x:Key="gen_dither_type_hint">建议不改（使用默认）</sys:String>
+    <sys:String x:Key="gen_dither_type_no">无抖动</sys:String>
+    <sys:String x:Key="gen_stage">生成阶段:{0}</sys:String>
+    <sys:String x:Key="gen_stage_0">解析与缓冲</sys:String>
+    <sys:String x:Key="gen_stage_1">方块最佳匹配计算</sys:String>
+    <sys:String x:Key="gen_stage_finished">已结束</sys:String>
+    <sys:String x:Key="gen_progress">生成进度({0}%):{1}/{2}</sys:String>
+    
+    <sys:String x:Key="gen_generate">生成</sys:String>
+    <sys:Int32 x:Key="default_dither_type">5</sys:Int32>
+    
+    <sys:String x:Key="export_title">导出</sys:String>
+    <sys:String x:Key="export_block_preview">导出方块预览图</sys:String>
+    <sys:String x:Key="export_map_preview">导出地图预览图</sys:String>
+    <sys:String x:Key="export_schem">导出schematic文件</sys:String>
+    <sys:String x:Key="export_bks">导出BKS文件</sys:String>
+    <sys:String x:Key="export_csv">导出csv文件</sys:String>
+    <sys:String x:Key="export_butto">自动导入Butto</sys:String>
+    
+    <sys:String x:Key="export_block_preview_tt">导出方块预览图</sys:String>
+    <sys:String x:Key="export_map_preview_tt">导出地图预览图</sys:String>
+    <sys:String x:Key="export_schem_tt">导出schematic文件</sys:String>
+    <sys:String x:Key="export_bks_tt">导出BKS文件</sys:String>
+    <sys:String x:Key="export_csv_tt">导出csv文件</sys:String>
+    <sys:String x:Key="export_butto_tt">自动导入Butto</sys:String>
+</ResourceDictionary>

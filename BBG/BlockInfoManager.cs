@@ -6,10 +6,11 @@ using System.IO;
 
 namespace BBG
 {
-    class BlockInfoManager
+   public class BlockInfoManager
     {
         public bool[] colorEnabled;
         int colorCount;
+        int now_colorCount;
         public int[] demoBlockIndex;
 
         public List<BlockData> blockDatas_higher = new List<BlockData>();//更高的方块信息
@@ -46,6 +47,7 @@ namespace BBG
                     }
                 }
                 colorCount = color_cnt;
+                now_colorCount = color_cnt;
                 colorEnabled = new bool[color_cnt];
                 for (int i = 0; i < colorEnabled.Length; i++)
                 {
@@ -71,6 +73,55 @@ namespace BBG
                 throw;
             }
 
+        }
+        public void DisableAllColor()
+        {
+            for (int i = 0; i < colorEnabled.Length; i++)
+            {
+                colorEnabled[i] = false;
+            }
+            now_colorCount = 0;
+        }
+        public void EnableAllColor()
+        {
+            for (int i = 0; i < colorEnabled.Length; i++)
+            {
+                colorEnabled[i] = true;
+            }
+            now_colorCount = colorCount;
+        }
+        public bool RemoveColor(int index)
+        {
+            bool bo = false;
+            if (colorEnabled[index])
+            {
+                colorEnabled[index] = false;
+                --now_colorCount;
+                bo = true;
+            }
+            return bo;
+        }
+        public bool AddColor(int index)
+        {
+            bool bo = false;
+            if (!colorEnabled[index])
+            {
+                colorEnabled[index] = true;
+                ++now_colorCount;
+                bo = true;
+            }
+            return bo;
+        }
+        public void ReverseColor(int index)
+        {
+            if (colorEnabled[index])
+            {
+                colorEnabled[index] = false;
+            }
+            else
+            {
+                colorEnabled[index] = true;
+            }
         }
 
         public BlockData[] GetBlockDatas2D()
@@ -111,17 +162,14 @@ namespace BBG
         public ConciseBlockData3D[] GetConciseBlockData3D()
         {
             List<ConciseBlockData3D> conciseBlockData3Ds = new List<ConciseBlockData3D>();
-            foreach (var item in blockDatas_flat)
+            for (int i = 0; i < blockDatas_higher.Count; i++)
             {
-                conciseBlockData3Ds.Add(GetConciseBlock(item));
-            }
-            foreach (var item in blockDatas_higher)
-            {
-                conciseBlockData3Ds.Add(GetConciseBlock(item));
-            }
-            foreach (var item in blockDatas_lower)
-            {
-                conciseBlockData3Ds.Add(GetConciseBlock(item));
+                if (colorEnabled[i])
+                {
+                    conciseBlockData3Ds.Add(GetConciseBlock(blockDatas_flat[i]));
+                    conciseBlockData3Ds.Add(GetConciseBlock(blockDatas_higher[i]));
+                    conciseBlockData3Ds.Add(GetConciseBlock(blockDatas_lower[i]));
+                }
             }
             return conciseBlockData3Ds.ToArray();
         }

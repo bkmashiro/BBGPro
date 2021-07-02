@@ -53,6 +53,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,8 +72,52 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AffairHandler.cs" />
+    <Compile Include="ColorDemo.xaml.cs">
+      <DependentUpon>ColorDemo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DitherService.cs" />
+    <Compile Include="Dither\AtkinsonDithering.cs" />
+    <Compile Include="Dither\BurkesDithering.cs" />
+    <Compile Include="Dither\DitheringBase.cs" />
+    <Compile Include="Dither\FakeDithering.cs" />
+    <Compile Include="Dither\FloydSteinbergDithering.cs" />
+    <Compile Include="Dither\IImageFormat.cs" />
+    <Compile Include="Dither\JarvisJudiceNinkeDithering.cs" />
+    <Compile Include="Dither\SierraDithering.cs" />
+    <Compile Include="Dither\SierraLiteDithering.cs" />
+    <Compile Include="Dither\SierraTwoRowDithering.cs" />
+    <Compile Include="Dither\StuckiDithering.cs" />
+    <Compile Include="Dither\TempByteImageFormat.cs" />
+    <Compile Include="Dither\TempDoubleImageFormat.cs" />
+    <Compile Include="Slides\ChooseColor.xaml.cs">
+      <DependentUpon>ChooseColor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Slides\export.xaml.cs">
+      <DependentUpon>export.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Slides\generateMap.xaml.cs">
+      <DependentUpon>generateMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Slides\Input.xaml.cs">
+      <DependentUpon>Input.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Slides\Welcome.xaml.cs">
+      <DependentUpon>Welcome.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Schematic.cs" />
+    <Compile Include="Slides\Homepage.xaml.cs">
+      <DependentUpon>Homepage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Structure.cs" />
+    <Page Include="ColorDemo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="en.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,6 +133,34 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Slides\ChooseColor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Slides\export.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Slides\generateMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Slides\Input.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Slides\Welcome.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Slides\Homepage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="zh-cn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapGenerator.cs" />
@@ -117,6 +190,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Slides\BlockCSS - 副本.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Slides\c_test2 - 副本.gif" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

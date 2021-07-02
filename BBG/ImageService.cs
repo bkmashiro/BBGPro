@@ -10,27 +10,68 @@ using System.Threading.Tasks;
 
 namespace BBG
 {
-    class ImageService
+    public class ImageService
     {
         string imagePath;
         Bitmap bitmap;
         byte[,,] imgByte;
+        public bool IsImgLoaded = false;
+        public bool UseDither = true;
+        public int ditherType = -1;
         public void LoadImage(string path)
         {
-            imagePath = path;
-            bitmap = new Bitmap(path);
+            try
+            {
+                imagePath = path;
+                bitmap = new Bitmap(path);
+                IsImgLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"图像读取错误：{ex.Message}");
+                throw;
+            }
+
         }
         public void LoadImage(Bitmap bmp)
         {
             bitmap = new Bitmap(bmp);
+            IsImgLoaded = true;
         }
         public byte[,,] GetImageArray()
         {
             if (File.Exists(imagePath))
             {
-                imgByte = new byte[bitmap.Width, bitmap.Height, 3];
-                GetRGBArray(bitmap, 0, 0, bitmap.Width, bitmap.Height, imgByte, 0, bitmap.Width);
-                return imgByte;
+                if (UseDither)
+                {
+                    System.Drawing.Bitmap ditheredBmp = new System.Drawing.Bitmap(bitmap.Width,bitmap.Height);
+                    DitherService ditherService = new DitherService();
+                    switch (ditherType)
+                    {
+                        case -1: ditheredBmp = bitmap; break;
+                        case 1: ditheredBmp = ditherService.DoBurkesDithering(bitmap); break;
+                        case 2: ditheredBmp = ditherService.FakeDithering(bitmap); break;
+                        case 3: ditheredBmp = ditherService.FloydSteinbergDithering(bitmap); break;
+                        case 4: ditheredBmp = ditherService.JarvisJudiceNinkeDithering(bitmap); break;
+                        case 5: ditheredBmp = ditherService.SierraDithering(bitmap); break;
+                        case 6: ditheredBmp = ditherService.SierraLiteDithering(bitmap); break;
+                        case 7: ditheredBmp = ditherService.SierraTwoRowDithering(bitmap); break;
+                        case 8: ditheredBmp = ditherService.StuckiDithering(bitmap); break;
+
+                        default:
+                            ditheredBmp = ditherService.DoAtkinsonDithering(bitmap);
+                            break;
+                    }
+                    imgByte = new byte[bitmap.Width, bitmap.Height, 3];
+                    GetRGBArray(ditheredBmp, 0, 0, bitmap.Width, bitmap.Height, imgByte, 0, bitmap.Width);
+                    return imgByte;
+                }
+                else
+                {
+                    imgByte = new byte[bitmap.Width, bitmap.Height, 3];
+                    GetRGBArray(bitmap, 0, 0, bitmap.Width, bitmap.Height, imgByte, 0, bitmap.Width);
+                    return imgByte;
+                }
             }
             else
             {

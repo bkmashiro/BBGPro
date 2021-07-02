@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BBG
 {
-    class ImgPreview
+    public class ImgPreview
     {
         BlockInfoManager BlockInfoManager;
         int width = 1;
