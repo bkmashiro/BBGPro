@@ -17,18 +17,17 @@
       Background="{DynamicResource MaterialDesignPaper}"
       Loaded="Page_Loaded">
     <Grid Margin="0">
-        <ScrollViewer>
+        <ScrollViewer Margin="0,0,0,42">
             <WrapPanel Name="wp"
                        Orientation="Vertical"></WrapPanel>
         </ScrollViewer>
         <Button Style="{StaticResource MaterialDesignRaisedLightButton}"
-                ToolTip="Resource name: MaterialDesignRaisedLightButton"
                 Content="{DynamicResource color_done}"
                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                 Click="Button_Click"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Margin="0,0,10,28" />
+                Margin="0,0,10,5" />
         <materialDesign:Snackbar x:Name="Snackbar"
                                  MessageQueue="{materialDesign:MessageQueue}" />
     </Grid>

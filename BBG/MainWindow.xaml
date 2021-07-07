@@ -7,8 +7,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="500"
-        Width="800"
+        Height="800"
+        Width="1200"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -37,25 +37,12 @@
             <!-- but you can use bare xaml too -->
             <!--<local:Slide2_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
             <!-- you can control (and create your own) wipes -->
-            <materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide.BackwardWipe>
-                    <materialDesign:CircleWipe />
-                </materialDesign:TransitionerSlide.BackwardWipe>
-                <materialDesign:TransitionerSlide.ForwardWipe>
-                    <materialDesign:SlideWipe Direction="Right" />
-                </materialDesign:TransitionerSlide.ForwardWipe>
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                 <!--<local:Slide3_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
                 <Frame x:Name="pg1"></Frame>
             </materialDesign:TransitionerSlide>
             <!-- now we are going to slide this in by combining some extra effects.  the inner content slides in, so we'll set the outer background and clip, to keep things nice -->
-            <materialDesign:TransitionerSlide ClipToBounds="True">
-                <materialDesign:TransitionerSlide.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="SlideInFromLeft"
-                                                     Duration="0:0:0.8" />
-                    <materialDesign:TransitionEffect Kind="SlideInFromBottom"
-                                                     Duration="0:0:0.8"
-                                                     OffsetTime="0:0:0.15" />
-                </materialDesign:TransitionerSlide.OpeningEffects>
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                 <!--<local:Slide4_CombineTransitions xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
                 <Frame x:Name="pg2"></Frame>
             </materialDesign:TransitionerSlide>

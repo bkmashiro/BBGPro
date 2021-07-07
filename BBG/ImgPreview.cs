@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace BBG
 {
@@ -15,6 +17,9 @@ namespace BBG
         int width = 1;
         int height = 1;
         byte[,] result;
+        ProgressBar ProgressBar;
+        TextBlock TextBlock;
+
         public void Init(BlockInfoManager b, int w, int h, byte[,] byteResult)
         {
             BlockInfoManager = b;
@@ -29,9 +34,40 @@ namespace BBG
                 if (BlockInfoManager.colorEnabled[j])
                 {
                     blockCssByte[j] = new byte[16 * 16 * 3];
-                    getBGRArrayForBlockBmp(new Bitmap(BlockInfoManager.blockDatas_higher[j].image[BlockInfoManager.demoBlockIndex[j]]), 0, 0, 16, 16, blockCssByte[j], 0, 16);
+                    getBGRArrayForBlockBmp(new Bitmap(System.AppDomain.CurrentDomain.BaseDirectory + @"blockdata/" + BlockInfoManager.blockDatas_higher[j].image[BlockInfoManager.demoBlockIndex[j]]), 0, 0, 16, 16, blockCssByte[j], 0, 16);
                 }
             }
+        }
+
+        public void BindProgress(ProgressBar pg, TextBlock tb)
+        {
+            ProgressBar = pg;
+            TextBlock = tb;
+        }
+        int workMax;
+        private void SetMaxProgress(int max)
+        {
+            workMax = max;
+            ProgressBar.Dispatcher.Invoke(new Action(() =>
+            {
+                ProgressBar.Maximum = max;
+            }));
+            TextBlock.Dispatcher.Invoke(new Action(() =>
+            {
+                TextBlock.Text = string.Format(Application.Current.FindResource("preview_progress_txt").ToString(), Application.Current.FindResource("preview_progress_buffering").ToString());
+            }));
+        }
+
+        private void UpdateProgress(int i)
+        {
+            ProgressBar.Dispatcher.Invoke(new Action(() =>
+            {
+                ProgressBar.Value = i;
+            }));
+            TextBlock.Dispatcher.Invoke(new Action(() =>
+            {
+                TextBlock.Text = string.Format(Application.Current.FindResource("preview_progress_copy").ToString(), (i / (float)workMax * 100).ToString("#0.0"));
+            }));
         }
         //存储方块css的交叉数组
         byte[][] blockCssByte;
@@ -59,11 +95,11 @@ namespace BBG
                 }
             }
 
+            SetMaxProgress(height * 16);
 
             return MySaveBMP(buffer, width * 16, height * 16);
         }
-
-        public static Bitmap MySaveBMP(byte[] buffer, int width, int height)
+        public Bitmap MySaveBMP(byte[] buffer, int width, int height)
         {
             Bitmap b = new Bitmap(width, height, PixelFormat.Format24bppRgb);
 
@@ -81,7 +117,7 @@ namespace BBG
             {
 
                 Buffer.BlockCopy(buffer, j * width * 3, newBuff, j * (width * 3 + skipByte), width * 3);
-
+                UpdateProgress(j);
                 //Console.WriteLine($"From{j * width * 3}to{j * (width * 3 + skipByte)}");
             }
 
@@ -91,7 +127,6 @@ namespace BBG
             // b.Save(@"transformed.bmp", ImageFormat.Bmp);
             return b;
         }
-
         public void getBGRArrayForBlockBmp(Bitmap image, int startX, int startY, int w, int h, byte[] bgrArray, int offset, int scansize)
         {
             //const int PixelWidth = 3;
@@ -121,5 +156,77 @@ namespace BBG
             }
         }
 
+        public Bitmap GetMap(byte[,] h = null)
+        {
+            byte[][][] colorBuffer = new byte[3][][]; //3个高度
+            colorBuffer[1] = new byte[BlockInfoManager.colorEnabled.Length][];//length个方块
+            for (int i = 0; i < BlockInfoManager.colorEnabled.Length; i++)
+            {
+                if (BlockInfoManager.colorEnabled[i])
+                {
+                    colorBuffer[1][i] = new byte[3];
+                    colorBuffer[1][i][0] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().B;
+                    colorBuffer[1][i][1] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().G;
+                    colorBuffer[1][i][2] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().R;
+                }
+            }
+
+            byte[] buffer = new byte[width * height * 3];
+
+            if (h == null)
+            {
+                //2D
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        for (int channel = 0; channel < 3; channel++)
+                        {
+                            buffer[x * height * 3 + y * 3 + channel] = colorBuffer[1][result[y, x]][channel];
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                //3D
+                //更高
+                for (int i = 0; i < BlockInfoManager.colorEnabled.Length; i++)
+                {
+                    if (BlockInfoManager.colorEnabled[i])
+                    {
+                        colorBuffer[2][i] = new byte[3];
+                        colorBuffer[2][i][0] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().B;
+                        colorBuffer[2][i][1] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().G;
+                        colorBuffer[2][i][2] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().R;
+                    }
+                }
+                //更低
+                for (int i = 0; i < BlockInfoManager.colorEnabled.Length; i++)
+                {
+                    if (BlockInfoManager.colorEnabled[i])
+                    {
+                        colorBuffer[0][i] = new byte[3];
+                        colorBuffer[0][i][0] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().B;
+                        colorBuffer[0][i][1] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().G;
+                        colorBuffer[0][i][2] = BlockInfoManager.blockDatas_flat[i].RGBColor.ToColor().R;
+                    }
+                }
+
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        for (int channel = 0; channel < 3; channel++)
+                        {
+                            buffer[x * height * 3 + height * 3 + channel] = colorBuffer[h[x,y]][result[x, y]][channel];
+                        }
+                    }
+                }
+            }
+
+            return MySaveBMP(buffer, width, height);
+        }
     }
 }

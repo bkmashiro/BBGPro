@@ -17,6 +17,7 @@ namespace BBG
         public Transitioner transitioner;
 
         public bool is3DMode;
+        public bool isMultiThread=true;
         public void InitInput()
         {
             BlockInfoManager = new BlockInfoManager();

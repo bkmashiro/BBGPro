@@ -16,14 +16,19 @@
       TextOptions.TextRenderingMode="Auto"
       Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
-        <Rectangle Fill="#FFD0D0F7"
+        <Grid 
                    HorizontalAlignment="Left"
                    Height="256"
                    Margin="10,53,0,0"
-                   Stroke="Black"
                    VerticalAlignment="Top"
                    Width="256"
-                   Drop="Rectangle_Drop" />
+                   Drop="Rectangle_Drop"
+              Background="#FFC2DAF7">
+            <TextBlock Text="{DynamicResource input_drop}"
+                       VerticalAlignment="Center"
+                       Margin="0"
+                       HorizontalAlignment="Center" />
+        </Grid>
         <TextBlock HorizontalAlignment="Left"
                    Margin="10,10,0,0"
                    TextWrapping="Wrap"
@@ -38,12 +43,9 @@
                Width="256"
                x:Name="image"
                Drop="image_Drop" />
-        <TextBlock Text="{DynamicResource input_drop}"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Margin="101,171,0,0" />
+
         <Button Style="{StaticResource MaterialDesignIconButton}"
-                ToolTip="MaterialDesignIconButton"
+                ToolTip="{DynamicResource input_btn}"
                 Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                 HorizontalAlignment="Left"
                 Margin="10,0,0,88"
@@ -54,7 +56,7 @@
             <materialDesign:PackIcon Kind="Plus" />
         </Button>
         <Button Style="{StaticResource MaterialDesignIconButton}"
-                ToolTip="MaterialDesignIconButton"
+                ToolTip="{DynamicResource input_dispose_btn}"
                 Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
                 HorizontalAlignment="Left"
                 Margin="63,0,0,88"
@@ -64,8 +66,7 @@
                 Click="disposeImg_Click">
             <materialDesign:PackIcon Kind="Trash" />
         </Button>
-        <Button Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                Content="{DynamicResource input_done}"
+        <Button Content="{DynamicResource input_done}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="0,0,10,10"
@@ -74,9 +75,9 @@
         <TextBlock HorizontalAlignment="Left"
                    Margin="23,0,0,43"
                    TextWrapping="Wrap"
-                   Text="ImageInfo"
                    VerticalAlignment="Bottom"
                    Width="243"
-                   Height="40" />
+                   Height="40"
+                   Name="imageInfo"/>
     </Grid>
 </Page>

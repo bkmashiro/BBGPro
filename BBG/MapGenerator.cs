@@ -3,8 +3,10 @@ using Colourful.Conversion;
 using Colourful.Difference;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,14 +43,18 @@ namespace BBG
         string str3;
         string str4;
         string str5;
+        public int[] blockUsage;
         AffairHandler AffairHandler;
 
-        public void BindProgress(ProgressBar p, TextBlock t1, TextBlock t2,AffairHandler affair)
+        public void BindProgress(ProgressBar p, TextBlock t1, TextBlock t2, AffairHandler affair)
         {
             AffairHandler = affair;
             progressBar = p;
             tb1 = t1;
             tb2 = t2;
+        }
+        private void SetProgress(int max)
+        {
             str1 = Application.Current.FindResource("gen_stage").ToString();
             str2 = Application.Current.FindResource("gen_progress").ToString();
             str3 = Application.Current.FindResource("gen_stage_0").ToString();
@@ -56,11 +62,8 @@ namespace BBG
             str5 = Application.Current.FindResource("gen_stage_finished").ToString();
             tb1.Dispatcher.Invoke(new Action(() =>
             {
-                tb1.Text = String.Format(str1, str3);
+                tb1.Text = string.Format(str1, str3);
             }));
-        }
-        private void SetProgress(int max)
-        {
             if (progressBar != null)
             {
                 progressBar.Dispatcher.Invoke(new Action(() =>
@@ -79,8 +82,19 @@ namespace BBG
                 }));
                 tb2.Dispatcher.Invoke(new Action(() =>
                 {
-                    tb2.Text = string.Format(str2, (((float)i +1f) / (float)workMax*100).ToString("#0.0"), i+1, workMax);
+                    tb2.Text = string.Format(str2, (((float)i) / workMax * 100).ToString("#0.0"), i + 1, workMax);
                 }));
+            }
+        }
+
+        private void IncProgress()
+        {
+            ++nowProgress;
+            UpdateProgress(nowProgress);
+            if (nowProgress==workMax)
+            {
+                OnGenerateFinished();
+                nowProgress = 0;
             }
         }
         public void Init(byte[,,] _rgbArray, bool useLab = true)
@@ -110,6 +124,8 @@ namespace BBG
             {
                 tb1.Text = String.Format(str1, str4);
             }));
+            blockUsage = new int[blockDatas.Length];
+
             var task1 = new Task(() =>
             {
                 int imgwidth = rgbArray.GetLength(0);
@@ -117,7 +133,7 @@ namespace BBG
                 result = new byte[imgwidth, imgheight];
                 double tmp_deltae = 0;
                 byte tmp_id = 0;
-                int hitcache = 0;
+
                 RGBColor tmpRGB;
                 for (int x = 0; x < rgbArray.GetLength(0); x++)
                 {
@@ -127,7 +143,7 @@ namespace BBG
                         if (cache != 0)
                         {//命中缓存
                             result[x, y] = cache;
-                            hitcache++;
+                            ++blockUsage[cache];
                             continue;
                         }
                         else
@@ -145,11 +161,11 @@ namespace BBG
                             }
                             Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(blockDatas[tmp_id].classId - 1);
                             result[x, y] = (byte)(blockDatas[tmp_id].classId - 1);
+                            ++blockUsage[result[x, y]];
                         }
                     }
                     UpdateProgress(x);
                 }
-                Console.WriteLine($"done!hit:{hitcache},total{imgwidth * imgheight},{(double)hitcache / imgwidth / imgheight * 100}%");
                 OnGenerateFinished();
 
             });
@@ -161,6 +177,7 @@ namespace BBG
             {
                 tb1.Text = String.Format(str1, str4);
             }));
+            blockUsage = new int[blockDatas.Length];
             var task1 = new Task(() =>
             {
                 Mapping = new byte[256, 256, 256];
@@ -170,7 +187,6 @@ namespace BBG
                 result = new byte[imgwidth, imgheight];
                 double tmp_deltae = 0;
                 byte tmp_id = 0;
-                int hitcache = 0;
 
                 RGBColor tmpRGB;
                 for (int x = 0; x < rgbArray.GetLength(0); x++)
@@ -182,15 +198,13 @@ namespace BBG
                         {//命中缓存
                             result[x, y] = cache;
                             height[x, y] = (blockDatas[cache].height);
-
-                            hitcache++;
+                            ++blockUsage[cache];
                             continue;
                         }
                         else
                         {//未命中，计算最适合的方块 
                             double deltae = double.MaxValue;
                             tmpRGB = new RGBColor(System.Drawing.Color.FromArgb(rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]));
-
                             for (byte _id = 0; _id < blockDatas.Length; _id++)
                             {
                                 tmp_deltae = GetErr2(tmpRGB, blockDatas[_id]);
@@ -203,15 +217,162 @@ namespace BBG
                             Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(blockDatas[tmp_id].classId - 1);
                             result[x, y] = (byte)(blockDatas[tmp_id].classId - 1);
                             height[x, y] = (blockDatas[tmp_id].height);
+                            ++blockUsage[result[x, y]];
                         }
                     }
+                    UpdateProgress(x);
                 }
                 OnGenerateFinished();
-                Console.WriteLine($"done!hit:{hitcache},total{imgwidth * imgheight},{(double)hitcache / imgwidth / imgheight * 100}%");
-
             });
             task1.Start();
         }
+
+        ConciseBlockData2D[] myblockDatas2D;
+        ConciseBlockData3D[] myblockDatas3D;
+
+        public void Multithread_Generate(ConciseBlockData2D[] blockDatas)
+        {
+
+            tb1.Dispatcher.Invoke(new Action(() =>
+            {
+                tb1.Text = String.Format(str1, str4);
+            }));
+            myblockDatas2D = blockDatas;
+            blockUsage = new int[blockDatas.Length];
+
+            var task1 = new Task(() =>
+            {
+                int imgwidth = rgbArray.GetLength(0);
+                int imgheight = rgbArray.GetLength(1);
+                result = new byte[imgwidth, imgheight];
+
+                ThreadPool.SetMaxThreads(16, 16);
+                for (int x = 0; x < rgbArray.GetLength(0); x++)
+                {
+                    ThreadPool.QueueUserWorkItem(WorkALine2D, x);
+                }
+            });
+            task1.Start();
+        }
+        public void Multithread_Generate(ConciseBlockData3D[] blockDatas)
+        {
+            tb1.Dispatcher.Invoke(new Action(() =>
+            {
+                tb1.Text = String.Format(str1, str4);
+            }));
+            myblockDatas3D = blockDatas;
+            blockUsage = new int[blockDatas.Length];
+
+            var task1 = new Task(() =>
+            {
+                int imgwidth = rgbArray.GetLength(0);
+                int imgheight = rgbArray.GetLength(1);
+                result = new byte[imgwidth, imgheight];
+                height = new byte[imgheight, imgheight];
+
+                ThreadPool.SetMaxThreads(16, 16);
+                for (int x = 0; x < rgbArray.GetLength(0); x++)
+                {
+                    ThreadPool.QueueUserWorkItem(WorkALine3D, x);
+                }
+            });
+            task1.Start();
+        }
+
+        private static readonly object objlock = new object();
+        private static readonly object objlock2 = new object();
+        private void WorkALine2D(object o)
+        {
+            int x = (int)o;
+            RGBColor tmpRGB;
+            double tmp_deltae = 0;
+            byte tmp_id = 0;
+            for (int y = 0; y < rgbArray.GetLength(1); y++)
+            {
+                byte cache = Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]];
+                if (cache != 0)
+                {//命中缓存
+                    result[x, y] = cache;
+                    lock (objlock2)
+                    {
+                        ++blockUsage[cache];
+                    }
+                    continue;
+                }
+                else
+                {//未命中，计算最适合的方块 
+                    double deltae = double.MaxValue;
+                    tmpRGB = new RGBColor(System.Drawing.Color.FromArgb(rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]));
+                    for (byte _id = 0; _id < myblockDatas2D.Length; _id++)
+                    {
+                        tmp_deltae = GetErr(tmpRGB, myblockDatas2D[_id]);
+                        if (tmp_deltae < deltae)
+                        {
+                            deltae = tmp_deltae;
+                            tmp_id = _id;
+                        }
+                    }
+                    Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(myblockDatas2D[tmp_id].classId - 1);
+                    result[x, y] = (byte)(myblockDatas2D[tmp_id].classId - 1);
+                    lock (objlock2)
+                    {
+                        ++blockUsage[result[x, y]];
+                    }
+                }
+            }
+            lock (objlock)
+            {
+                IncProgress();
+            }
+        }
+        private void WorkALine3D(object o)
+        {
+            int x = (int)o;
+            RGBColor tmpRGB;
+            double tmp_deltae = 0;
+            byte tmp_id = 0;
+            for (int y = 0; y < rgbArray.GetLength(1); y++)
+            {
+                byte cache = Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]];
+                if (cache != 0)
+                {//命中缓存
+                    result[x, y] = cache;
+                    height[x, y] = (myblockDatas3D[cache].height);
+                    lock (objlock2)
+                    {
+                        ++blockUsage[cache];
+                    }
+                    continue;
+                }
+                else
+                {//未命中，计算最适合的方块 
+                    double deltae = double.MaxValue;
+                    tmpRGB = new RGBColor(System.Drawing.Color.FromArgb(rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]));
+
+                    for (byte _id = 0; _id < myblockDatas3D.Length; _id++)
+                    {
+                        tmp_deltae = GetErr2(tmpRGB, myblockDatas3D[_id]);
+                        if (tmp_deltae < deltae)
+                        {
+                            deltae = tmp_deltae;
+                            tmp_id = _id;
+                        }
+                    }
+                    Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(myblockDatas3D[tmp_id].classId - 1);
+                    result[x, y] = (byte)(myblockDatas3D[tmp_id].classId - 1);
+                    height[x, y] = (myblockDatas3D[tmp_id].height);
+                    lock (objlock2)
+                    {
+                        ++blockUsage[result[x, y]];
+                    }
+                }
+            }
+            lock (objlock)
+            {
+                IncProgress();
+            }
+        }
+
         private void OnGenerateFinished()
         {
             tb1.Dispatcher.Invoke(new Action(() =>

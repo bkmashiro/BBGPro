@@ -1,7 +1,9 @@
 ﻿#define iIsDebug
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,7 +35,7 @@ namespace BBG
                 dictionaryList.Add(dictionary);
             }
             string requestedCulture = string.Format(@"{0}.xaml", Culture);
-            ResourceDictionary resourceDictionary = dictionaryList.FirstOrDefault(d => d.Source.OriginalString.Equals(requestedCulture));
+            ResourceDictionary resourceDictionary = dictionaryList.FirstOrDefault(d => !(d.Source is null) && d.Source.OriginalString.Equals(requestedCulture));
             if (resourceDictionary == null)
             {
                 requestedCulture = @"zh-cn.xaml";
@@ -44,6 +46,7 @@ namespace BBG
                 Application.Current.Resources.MergedDictionaries.Remove(resourceDictionary);
                 Application.Current.Resources.MergedDictionaries.Add(resourceDictionary);
             }
+            CheckUpdate();
         }
         AffairHandler affairHandler = new AffairHandler();
 
@@ -78,11 +81,18 @@ namespace BBG
 #endif
             affairHandler.InitAll();
             affairHandler.BindTransitioner(MainTransitioner);
-            pg0.Content = new Page1(affairHandler);
-            pg1.Content = new Slides.Input(affairHandler);
-            pg2.Content = new Slides.ChooseColor(affairHandler);
-            pg3.Content = new Slides.generateMap(affairHandler);
-            pg4.Content = new Slides.export(affairHandler);
+            Task task = new Task(() =>
+            {
+                App.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    pg0.Content = new Page1(affairHandler);
+                    pg1.Content = new Slides.Input(affairHandler);
+                    pg2.Content = new Slides.ChooseColor(affairHandler);
+                    pg3.Content = new Slides.generateMap(affairHandler);
+                    pg4.Content = new Slides.export(affairHandler);
+                }));
+            });
+            task.Start();
 
             IsStartGenerated = true;
             IsChooseImageGenerated = true;
@@ -102,6 +112,7 @@ namespace BBG
                 affairHandler.PageTo(0);
                 IsStartGenerated = true;
             }
+            DrawerHost.IsLeftDrawerOpen = false;
         }
         bool IsChooseImageGenerated = false;
         private void guide_choose_image_btn_Click(object sender, RoutedEventArgs e)
@@ -164,6 +175,50 @@ namespace BBG
                 IsExportGenerated = true;
             }
             DrawerHost.IsLeftDrawerOpen = false;
+        }
+
+        string Version = "1.0.0.0";
+        int[] localVersion = { 1, 0, 0, 0 };
+
+        private void CheckUpdate()
+        {
+            Task t = new Task(new Action(() =>
+            {
+                try
+                {
+                    string updateString = @"https://gitee.com/bakamashiro/bbg-pro-update/raw/master/bbgupdate.txt";
+                    WebClient webClient = new WebClient();
+                    webClient.Encoding = System.Text.Encoding.UTF8;
+                    string datas = webClient.DownloadString(updateString);
+                    string[] data = datas.Split('\r');
+                    string ver = data[1].Trim().Split(':')[1].Trim();
+                    string link = data[2].Trim().Split(':')[1].Trim();
+                    string file = data[3].Trim().Split(':')[1].Trim();
+                    string[] vers = ver.Split('.');
+                    int[] verInts = new int[4];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        verInts[i] = int.Parse(vers[i]);
+                    }
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (localVersion[i] < verInts[i])
+                        {
+                            //Update
+                            System.Windows.Forms.MessageBox.Show("BBG Pro惊现更新！点击主页面下方 “教程/更新” 按钮去更新！");
+                            break;
+                        }
+                    }
+                    Console.WriteLine();
+
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.Forms.MessageBox.Show($"看起来BBG Pro更新服务遇到了问题。Error:{ex.Message}");
+                    throw;
+                }
+            }));
+            t.Start();
         }
     }
 }

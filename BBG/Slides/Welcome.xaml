@@ -17,32 +17,42 @@
       Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
         <TextBlock Text="{DynamicResource welcome_title}"
-                   HorizontalAlignment="Left"
+                   HorizontalAlignment="Center"
                    VerticalAlignment="Top"
                    FontSize="35"
-                   Margin="10,31,0,0" />
-        <TextBlock Text="{DynamicResource welcome_youcan}"
-                   Margin="32,81,0,0"
-                   VerticalAlignment="Top"
-                   HorizontalAlignment="Left"
-                   FontSize="25"
-                   RenderTransformOrigin="0.431,1.512" />
+                   Margin="0,31,0,0" />
         <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                 ToolTip="{DynamicResource welcome_know_more_tt}"
                 Content="{DynamicResource welcome_know_more}"
-                Margin="300,0,300,37"
+                Margin="0,0,0,47"
                 VerticalAlignment="Bottom"
                 d:LayoutOverrides="Height"
                 Name="learn_more"
-                Click="learn_more_Click" />
+                Click="learn_more_Click"
+                HorizontalAlignment="Center"
+                BorderBrush="#FF7D7985"
+                Foreground="#FF736C80" />
         <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                 ToolTip="{DynamicResource welcome_start_tt}"
                 Content="{DynamicResource welcome_start}"
-                Margin="200,0,200,118"
+                Margin="0,0,0,118"
                 x:Name="start"
                 Click="start_Click"
                 IsDefault="True"
                 VerticalAlignment="Bottom"
-                d:LayoutOverrides="VerticalAlignment" />
+                d:LayoutOverrides="VerticalAlignment"
+                HorizontalAlignment="Center"
+                FontWeight="Normal" />
+        <Button Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="MaterialDesignIconButton"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                HorizontalAlignment="Right"
+                Margin="0,0,10,10"
+                VerticalAlignment="Bottom"
+                d:LayoutOverrides="Width, Height"
+                Name="switch_language"
+                Click="switch_language_Click">
+            <materialDesign:PackIcon Kind="LanguageBox" />
+        </Button>
     </Grid>
 </Page>

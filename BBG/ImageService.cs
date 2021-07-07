@@ -18,6 +18,9 @@ namespace BBG
         public bool IsImgLoaded = false;
         public bool UseDither = true;
         public int ditherType = -1;
+        public int width = -1;
+        public int length = -1;
+        public string imageName;
         public void LoadImage(string path)
         {
             try
@@ -25,6 +28,9 @@ namespace BBG
                 imagePath = path;
                 bitmap = new Bitmap(path);
                 IsImgLoaded = true;
+                width = bitmap.Width;
+                length = bitmap.Height;
+
             }
             catch (Exception ex)
             {

@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AffairHandler.cs" />
+    <Compile Include="BKS.cs" />
     <Compile Include="ColorDemo.xaml.cs">
       <DependentUpon>ColorDemo.xaml</DependentUpon>
     </Compile>

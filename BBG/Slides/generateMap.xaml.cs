@@ -26,7 +26,7 @@ namespace BBG.Slides
             AffairHandler = affairHandler;
             Gen_progress_grid.Visibility = Visibility.Collapsed;
             progress_bar.IsIndeterminate = true;
-            affairHandler.mapGenerator.BindProgress(progress_bar, txt_stage, txt_progress,affairHandler);
+            affairHandler.mapGenerator.BindProgress(progress_bar, txt_stage, txt_progress, affairHandler);
         }
 
         public delegate void Gen();
@@ -44,11 +44,26 @@ namespace BBG.Slides
 
             if (Is3dEnabled)
             {//3d
-                AffairHandler.mapGenerator.Generate(AffairHandler.BlockInfoManager.GetConciseBlockData3D());
+                if (AffairHandler.isMultiThread)
+                {
+                    AffairHandler.mapGenerator.Multithread_Generate(AffairHandler.BlockInfoManager.GetConciseBlockData3D());
+                }
+                else
+                {
+                    AffairHandler.mapGenerator.Generate(AffairHandler.BlockInfoManager.GetConciseBlockData3D());
+                }
             }
             else
             {//2d
-                AffairHandler.mapGenerator.Generate(AffairHandler.BlockInfoManager.GetConciseBlockData2D());
+                //AffairHandler.mapGenerator.Generate(AffairHandler.BlockInfoManager.GetConciseBlockData2D());
+                if (AffairHandler.isMultiThread)
+                {
+                    AffairHandler.mapGenerator.Multithread_Generate(AffairHandler.BlockInfoManager.GetConciseBlockData2D());
+                }
+                else
+                {
+                    AffairHandler.mapGenerator.Generate(AffairHandler.BlockInfoManager.GetConciseBlockData2D());
+                }
             }
         }
 

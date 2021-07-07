@@ -43,7 +43,12 @@ namespace BBG.Slides
 
         private void disposeImg_Click(object sender, RoutedEventArgs e)
         {
+            height = -1;
+            width = -1;
 
+            filePath = string.Empty;
+            myfileName = string.Empty;
+            image.Source = null;
         }
         string filePath;
         string myfileName;
@@ -52,7 +57,7 @@ namespace BBG.Slides
 
         private void AddImg_Click(object sender, RoutedEventArgs e)
         {
-            using (System.Windows.Forms.OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "图像文件(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|所有文件(*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
@@ -61,7 +66,7 @@ namespace BBG.Slides
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     filePath = openFileDialog.FileName;
-                    myfileName = openFileDialog.SafeFileName;
+                    myfileName = System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileName) ;
                     try
                     {
                         image.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
@@ -70,6 +75,7 @@ namespace BBG.Slides
                             System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
                             width = image.Width;
                             height = image.Height;
+                            imageInfo.Text = $"{width}px*{height}px";
                         }
                     }
                     catch (Exception ex)
@@ -83,9 +89,10 @@ namespace BBG.Slides
 
         private void input_ok_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(filePath)&&filePath!=string.Empty)
+            if (File.Exists(filePath) && filePath != string.Empty)
             {
                 AffairHandler.ImageService.LoadImage(filePath);
+                AffairHandler.ImageService.imageName = myfileName;
                 AffairHandler.PageTo(2);
             }
             else

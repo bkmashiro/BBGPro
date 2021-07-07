@@ -9,17 +9,20 @@
     <sys:String x:Key="guide_export">导出</sys:String>
     
     
-    <sys:String x:Key="welcome_title">欢迎使用baka_mashiro's Block Generator Pro</sys:String>
-    <sys:String x:Key="welcome_youcan">您可以：</sys:String>
+    <sys:String x:Key="welcome_title">欢迎使用BBG Pro</sys:String>
+    <sys:String x:Key="welcome_youcan">您可以</sys:String>
     <sys:String x:Key="welcome_start">开始创作地图画！</sys:String>
     <sys:String x:Key="welcome_start_tt">点击去创作地图画</sys:String>
-    <sys:String x:Key="welcome_know_more">教程/了解更多</sys:String>
+    <sys:String x:Key="welcome_know_more">教程/更新</sys:String>
     <sys:String x:Key="welcome_know_more_tt">去BBG Pro的官方页面，了解更多知识。</sys:String>
+    <sys:String x:Key="welcome_language_tt">更换语言</sys:String>
     
     <sys:String x:Key="input_input">导入图片</sys:String>
     <sys:String x:Key="input_btn">点击导入</sys:String>
-    <sys:String x:Key="input_drop">拖放图片</sys:String>
+    <sys:String x:Key="input_dispose_btn">点击移除</sys:String>
+    <sys:String x:Key="input_drop">拖放图片或点击下方加号</sys:String>
     <sys:String x:Key="input_done">选好了！</sys:String>
+
     
     <sys:String x:Key="color_demo_img_tt">该方块将用于预览图中表示该颜色</sys:String>
     <sys:String x:Key="color_demo_img2_tt">{0}</sys:String>
@@ -68,4 +71,12 @@
     <sys:String x:Key="export_bks_tt">导出BKS文件</sys:String>
     <sys:String x:Key="export_csv_tt">导出csv文件</sys:String>
     <sys:String x:Key="export_butto_tt">自动导入Butto</sys:String>
+    <sys:String x:Key="export_block_count">统计</sys:String>
+    
+    <sys:String x:Key="preview_progress_txt">生成进度：{0}</sys:String>
+    <sys:String x:Key="preview_progress_buffering">缓存内存位图</sys:String>
+    <sys:String x:Key="preview_progress_copy">扫描复制内存位图({0}%)</sys:String>
+    <sys:String x:Key="preview_progress_saving">编码并写入磁盘（这可能需要一段时间）</sys:String>
+    <sys:String x:Key="preview_progress_finished">完成</sys:String>
+    <sys:String x:Key="exoprt_warn_ascii">Schematic文件文件名中不能出现中文！否则WorldEdit将无法识别！</sys:String>
 </ResourceDictionary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,29 @@ namespace BBG.Slides
         {
             InitializeComponent();
             AffairHandler = affairHandler;
-            for (int i = 0; i < affairHandler.BlockInfoManager.blockDatas_higher.Count; i++)
+            Task task = new Task(() =>
             {
-                this.wp.Children.Add(new ColorDemo(affairHandler, i));
-            }
+                for (int i = 0; i < affairHandler.BlockInfoManager.blockDatas_higher.Count; i++)
+                {
+                    try
+                    {
+                        this.wp.Dispatcher.Invoke(new Action(() =>
+                        {
+                            this.wp.Children.Add(new ColorDemo(affairHandler, i));
+                        }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                    }
+                    catch (Exception)
+                    {
+
+                    }    
+                }
+            });
+            task.Start();
         }
+
+
+
+
 
         public AffairHandler AffairHandler { get; }
 
