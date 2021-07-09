@@ -13,7 +13,7 @@ using System.Windows.Controls;
 
 namespace BBG
 {
-    public class MapGenerator
+    public class MuteGenerator
     {
         /*-
          * 先Init
@@ -31,89 +31,16 @@ namespace BBG
         int imgLength;
         byte[,,] rgbArray;
         GenerateType generateType = GenerateType._2d;
-        ProgressBar progressBar;
-        TextBlock tb1;
-        TextBlock tb2;
-        int workMax = -1;
-        int nowProgress = 0;
-        int hitcnt = -1;
-        int pixelTotal = -1;
-        string str1;
-        string str2;
-        string str3;
-        string str4;
-        string str5;
-        public int[] blockUsage;
+
         AffairHandler AffairHandler;
         public void MappingOverRide(byte[,,] b) => Mapping = b;
-        public void BindProgress(ProgressBar p, TextBlock t1, TextBlock t2, AffairHandler affair)
-        {
-            AffairHandler = affair;
-            progressBar = p;
-            tb1 = t1;
-            tb2 = t2;
-        }
-        private void SetProgress(int max)
-        {
-            str1 = Application.Current.FindResource("gen_stage").ToString();
-            str2 = Application.Current.FindResource("gen_progress").ToString();
-            str3 = Application.Current.FindResource("gen_stage_0").ToString();
-            str4 = Application.Current.FindResource("gen_stage_1").ToString();
-            str5 = Application.Current.FindResource("gen_stage_finished").ToString();
-            tb1.Dispatcher.Invoke(new Action(() =>
-            {
-                tb1.Text = string.Format(str1, str3);
-            }));
-            if (progressBar != null)
-            {
-                progressBar.Dispatcher.Invoke(new Action(() =>
-                {
-                    progressBar.Maximum = max;
-                }));
-            }
-            Task t = new Task(new Action(() =>
-            {
-                while (nowProgress != workMax)
-                {
-                    UpdateProgress(nowProgress);
-                    Thread.Sleep(100);
-                }
-            }));
-            t.Start();
-        }
-        private void UpdateProgress(int i)
-        {
-            if (progressBar != null)
-            {
-                progressBar.Dispatcher.Invoke(new Action(() =>
-                {
-                    progressBar.Value = i;
-                }));
-                tb2.Dispatcher.Invoke(new Action(() =>
-                {
-                    tb2.Text = string.Format(str2, (((float)i) / workMax * 100).ToString("#0.0"), i + 1, workMax);
-                }));
-            }
-        }
-        Stopwatch stopwatch = new Stopwatch();
-        private void IncProgress()
-        {
 
-            ++nowProgress;
-            if (nowProgress == workMax)
-            {
-                OnGenerateFinished();
-                stopwatch.Stop();
-                Console.WriteLine(stopwatch.ElapsedMilliseconds);
-                nowProgress = 0;
-            }
-        }
         public void Init(byte[,,] _rgbArray, bool useLab = true)
         {
             imgWidth = _rgbArray.GetLength(0);
-            workMax = imgWidth;
-            SetProgress(workMax);
             imgLength = _rgbArray.GetLength(1);
+            nowProgress = 0;
+
             generateType = GenerateType._2d;
             if (Mapping == null)
             {
@@ -134,11 +61,7 @@ namespace BBG
         }
         public void Generate(ConciseBlockData2D[] blockDatas)
         {
-            tb1.Dispatcher.Invoke(new Action(() =>
-            {
-                tb1.Text = String.Format(str1, str4);
-            }));
-            blockUsage = new int[blockDatas.Length];
+
 
             var task1 = new Task(() =>
             {
@@ -157,7 +80,6 @@ namespace BBG
                         if (cache != 0)
                         {//命中缓存
                             result[x, y] = cache;
-                            ++blockUsage[cache];
                             continue;
                         }
                         else
@@ -175,10 +97,8 @@ namespace BBG
                             }
                             Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(blockDatas[tmp_id].classId - 1);
                             result[x, y] = (byte)(blockDatas[tmp_id].classId - 1);
-                            ++blockUsage[result[x, y]];
                         }
                     }
-                    UpdateProgress(x);
                 }
                 OnGenerateFinished();
 
@@ -187,11 +107,7 @@ namespace BBG
         }
         public void Generate(ConciseBlockData3D[] blockDatas)
         {
-            tb1.Dispatcher.Invoke(new Action(() =>
-            {
-                tb1.Text = String.Format(str1, str4);
-            }));
-            blockUsage = new int[blockDatas.Length];
+
             var task1 = new Task(() =>
             {
                 if (Mapping == null)
@@ -215,7 +131,6 @@ namespace BBG
                         {//命中缓存
                             result[x, y] = cache;
                             height[x, y] = (blockDatas[cache].height);
-                            ++blockUsage[cache];
                             continue;
                         }
                         else
@@ -234,10 +149,8 @@ namespace BBG
                             Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(blockDatas[tmp_id].classId - 1);
                             result[x, y] = (byte)(blockDatas[tmp_id].classId - 1);
                             height[x, y] = (blockDatas[tmp_id].height);
-                            ++blockUsage[result[x, y]];
                         }
                     }
-                    UpdateProgress(x);
                 }
                 OnGenerateFinished();
             });
@@ -246,17 +159,10 @@ namespace BBG
 
         ConciseBlockData2D[] myblockDatas2D;
         ConciseBlockData3D[] myblockDatas3D;
-
+        private readonly object locker = new object();
         public void Multithread_Generate(ConciseBlockData2D[] blockDatas)
         {
-
-            tb1.Dispatcher.Invoke(new Action(() =>
-            {
-                tb1.Text = string.Format(str1, str4);
-            }));
             myblockDatas2D = blockDatas;
-            blockUsage = new int[blockDatas.Length];
-            stopwatch.Start();
             var task1 = new Task(() =>
             {
                 int imgwidth = rgbArray.GetLength(0);
@@ -268,17 +174,21 @@ namespace BBG
                 {
                     ThreadPool.QueueUserWorkItem(WorkALine2D, x);
                 }
+                lock (locker)
+                {
+                    while (nowProgress != imgwidth)
+                    {
+                        Monitor.Wait(locker);//等待
+                    }
+                }
             });
             task1.Start();
+            task1.Wait();
+
         }
         public void Multithread_Generate(ConciseBlockData3D[] blockDatas)
         {
-            tb1.Dispatcher.Invoke(new Action(() =>
-            {
-                tb1.Text = String.Format(str1, str4);
-            }));
             myblockDatas3D = blockDatas;
-            blockUsage = new int[blockDatas.Length];
 
             var task1 = new Task(() =>
             {
@@ -292,8 +202,16 @@ namespace BBG
                 {
                     ThreadPool.QueueUserWorkItem(WorkALine3D, x);
                 }
+                lock (locker)
+                {
+                    while (nowProgress != imgwidth)
+                    {
+                        Monitor.Wait(locker);//等待
+                    }
+                }
             });
             task1.Start();
+            task1.Wait();
         }
 
         private static readonly object objlock = new object();
@@ -301,11 +219,11 @@ namespace BBG
 
         SpinLock _spinLock = new SpinLock();
         SpinLock _spinLock2 = new SpinLock();
+        int nowProgress;
         private void WorkALine2D(object o)
         {
             bool _lock = false;
             bool _lock2 = false;
-            
             int x = (int)o;
             RGBColor tmpRGB;
             double tmp_deltae = 0;
@@ -318,7 +236,6 @@ namespace BBG
                     //命中缓存
                     result[x, y] = cache;
                     _spinLock.Enter(ref _lock);
-                    ++blockUsage[cache];
                     _spinLock.Exit();
                     _lock = false;
                     continue;
@@ -339,14 +256,14 @@ namespace BBG
                     Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(myblockDatas2D[tmp_id].classId - 1);
                     result[x, y] = (byte)(myblockDatas2D[tmp_id].classId - 1);
                     _spinLock2.Enter(ref _lock2);
-                    ++blockUsage[result[x, y]];
                     _spinLock2.Exit();
                     _lock2 = false;
                 }
             }
-            lock (objlock)
+            lock (locker)
             {
-                IncProgress();
+                ++nowProgress;
+                Monitor.Pulse(locker);
             }
         }
         private void WorkALine3D(object o)
@@ -362,10 +279,6 @@ namespace BBG
                 {//命中缓存
                     result[x, y] = cache;
                     height[x, y] = (myblockDatas3D[cache].height);
-                    lock (objlock2)
-                    {
-                        ++blockUsage[cache];
-                    }
                     continue;
                 }
                 else
@@ -385,25 +298,18 @@ namespace BBG
                     Mapping[rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]] = (byte)(myblockDatas3D[tmp_id].classId - 1);
                     result[x, y] = (byte)(myblockDatas3D[tmp_id].classId - 1);
                     height[x, y] = (myblockDatas3D[tmp_id].height);
-                    lock (objlock2)
-                    {
-                        ++blockUsage[result[x, y]];
-                    }
                 }
             }
-            lock (objlock)
+            lock (locker)
             {
-                IncProgress();
+                ++nowProgress;
+                Monitor.Pulse(locker);
             }
         }
 
         private void OnGenerateFinished()
         {
-            tb1.Dispatcher.Invoke(new Action(() =>
-            {
-                tb1.Text = string.Format(str1, str5);
-            }));
-            AffairHandler.PageTo(4);
+
         }
         public byte[,] Get2DResult() => result;
         public (byte[,], byte[,]) Get3DResult() => (result, height);

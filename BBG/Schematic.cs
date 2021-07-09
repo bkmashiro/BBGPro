@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BBG
 {
-   public class Schematic
+    public class Schematic
     {
         List<string> blockPalette = new List<string>();
         List<byte> blockMetadata = new List<byte>();
@@ -68,6 +68,7 @@ namespace BBG
             {
                 Palette.Value.Add(item, (int)cnt++);
             }
+           
 
             System.Console.WriteLine();
             #endregion
@@ -127,26 +128,18 @@ namespace BBG
             System.Console.WriteLine("生成成功！");
         }
 
-        public void Save()
-        {
-            Generate();
-            document.Save(@"D:\newbddld\1.16.5-fabric\1.16.5-fabric\1.16.5\[光影版本]XPlus 2.0 for 1.16.5整合包-fabric-20210127\.minecraft\config\worldedit\schematics\ts.schem");
-        }
+        //public void Save()
+        //{
+        //    Generate();
+        //    document.Save(@"D:\newbddld\1.16.5-fabric\1.16.5-fabric\1.16.5\[光影版本]XPlus 2.0 for 1.16.5整合包-fabric-20210127\.minecraft\config\worldedit\schematics\ts.schem");
+        //}
 
         public void Save(string path)
         {
-            if (document != null)
-            {
-                if (Directory.Exists(path))
-                {
-                    Generate();
-                    document.Save(path);
-                }
-            }
-            else
-            {
-                throw new ArgumentNullException("未生成Schematic数据。");
-            }
+
+            Generate();
+            Console.WriteLine($"Saved {path}");
+            document.Save(path);
         }
 
         private byte[] Flatten(byte[,,] ids)
@@ -174,7 +167,6 @@ namespace BBG
             length = z;
             Console.WriteLine($"init:{x}X,{y}Y,{z}Z");
         }
-
         public bool ReadBlockDatas(BlockData[] blockData)
         {
             bool bo = true;
@@ -237,7 +229,6 @@ namespace BBG
         }
         public void Read2D(byte[,] id)
         {
-
             Init(id.GetLength(0), 1, id.GetLength(1));
             for (int x = 0; x < id.GetLength(0); x++)
             {
@@ -248,6 +239,16 @@ namespace BBG
             }
         }
 
-      
+        public void ReadMask(bool[,] mask)
+        {
+            for (int i = 0; i < mask.GetLength(0); i++)
+            {
+                for (int j = 0; j < mask.GetLength(1); j++)
+                {
+                    if(mask[i,j])
+                        Setblock(0, i, 0, j);
+                }
+            }
+        }
     }
 }

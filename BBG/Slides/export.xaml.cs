@@ -140,7 +140,7 @@ namespace BBG.Slides
                         TextTo(System.Windows.Application.Current.FindResource("preview_progress_saving").ToString());
                         foreach (var item in sfd.FileName)
                         {
-                            if (item < 128)
+                            if (item > 128)
                             {
                                 System.Windows.Forms.MessageBox.Show(System.Windows.Application.Current.FindResource("exoprt_warn_ascii").ToString());
                                 return;

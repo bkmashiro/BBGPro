@@ -176,7 +176,21 @@ namespace BBG
             }
             DrawerHost.IsLeftDrawerOpen = false;
         }
-
+        bool IsBatchGenerated = false;
+        private void guide_batch_btn_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsBatchGenerated)
+            {
+                affairHandler.PageTo(5);
+            }
+            else
+            {
+                pg5.Content = new Slides.Batch(affairHandler);
+                affairHandler.PageTo(5);
+                IsBatchGenerated = true;
+            }
+            DrawerHost.IsLeftDrawerOpen = false;
+        }
         string Version = "1.0.0.0";
         int[] localVersion = { 1, 0, 0, 0 };
 
@@ -220,5 +234,7 @@ namespace BBG
             }));
             t.Start();
         }
+
+        
     }
 }

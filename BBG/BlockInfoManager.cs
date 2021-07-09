@@ -66,6 +66,7 @@ namespace BBG
                     BlockData blockData2 = new BlockData(item.name, item.metadata, lab, RGB, item.image, item.classid, 0);
                     blockDatas_lower.Add(blockData);
                 }
+                Console.WriteLine();
             }
             catch (Exception ex)
             {

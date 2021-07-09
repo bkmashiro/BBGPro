@@ -55,6 +55,11 @@
                 <!--<local:Slide1_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
                 <Frame x:Name="pg4"></Frame>
             </materialDesign:TransitionerSlide>
+            
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <!--<local:Slide1_Intro xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
+                <Frame x:Name="pg5"></Frame>
+            </materialDesign:TransitionerSlide>
             <!--<local:Slide5_TransitioningContent xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />
             <local:Slide6_Origins xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />
             <local:Slide7_MVVM xmlns:local="clr-namespace:MaterialDesignDemo.TransitionsDemo" />-->
@@ -103,6 +108,12 @@
                             HorizontalAlignment="Center"
                             Style="{DynamicResource MaterialDesignFlatButton}"
                             Content="{DynamicResource guide_export}" />
+                    <Button x:Name="guide_batch_btn"
+                            Click="guide_batch_btn_Click"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}"
+                            Content="{DynamicResource guide_bacth}" />
                 </StackPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <Button x:Name="jjj"

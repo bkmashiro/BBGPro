@@ -7,6 +7,7 @@
     <sys:String x:Key="guide_choose_color">选择颜色</sys:String>
     <sys:String x:Key="guide_generate">生成</sys:String>
     <sys:String x:Key="guide_export">导出</sys:String>
+    <sys:String x:Key="guide_bacth">批处理</sys:String>
     
     
     <sys:String x:Key="welcome_title">欢迎使用BBG Pro</sys:String>
@@ -79,4 +80,15 @@
     <sys:String x:Key="preview_progress_saving">编码并写入磁盘（这可能需要一段时间）</sys:String>
     <sys:String x:Key="preview_progress_finished">完成</sys:String>
     <sys:String x:Key="exoprt_warn_ascii">Schematic文件文件名中不能出现中文！否则WorldEdit将无法识别！</sys:String>
+    
+    <sys:String x:Key="batch_title">批处理</sys:String>
+    <sys:String x:Key="batch_choose_color">选择颜色</sys:String>
+    <sys:String x:Key="batch_color_info">颜色已选择：{0}</sys:String>
+    <sys:String x:Key="batch_color_default">颜色已选择：全部</sys:String>
+    <sys:String x:Key="batch_import">载入图片或选择文件夹</sys:String>
+    <sys:String x:Key="batch_3d_on">立体地图画模式：已开启</sys:String>
+    <sys:String x:Key="batch_3d_off">立体地图画模式：关闭</sys:String>
+    <sys:String x:Key="batch_color_space">色彩空间</sys:String>
+    <sys:String x:Key="batch_dither">抖动模式</sys:String>
+    <sys:String x:Key="batch_start_process">执行</sys:String>
 </ResourceDictionary>
