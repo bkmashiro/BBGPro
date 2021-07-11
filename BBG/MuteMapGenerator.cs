@@ -135,7 +135,7 @@ namespace BBG
                             continue;
                         }
                         else
-                        {//未命中，计算最适合的方块 
+                        {//未命中，计算最适合方块
                             double deltae = double.MaxValue;
                             tmpRGB = new RGBColor(System.Drawing.Color.FromArgb(rgbArray[x, y, 0], rgbArray[x, y, 1], rgbArray[x, y, 2]));
                             for (byte _id = 0; _id < blockDatas.Length; _id++)
