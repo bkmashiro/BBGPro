@@ -25,27 +25,28 @@ namespace BBG.Slides
         {
             InitializeComponent();
             AffairHandler = affairHandler;
+            affairHandler.chooseColor = this;
             Task task = new Task(() =>
             {
                 for (int i = 0; i < affairHandler.BlockInfoManager.blockDatas_higher.Count; i++)
                 {
                     try
                     {
-                        this.wp.Dispatcher.Invoke(new Action(() =>
+                        wp.Dispatcher.Invoke(new Action(() =>
                         {
-                            this.wp.Children.Add(new ColorDemo(affairHandler, i));
+                            wp.Children.Add(new ColorDemo(affairHandler, i));
                         }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
                     }
-                    catch (Exception)
+                    catch
                     {
-
-                    }    
+                        //Do nothing
+                    }
                 }
             });
             task.Start();
         }
 
-
+        public bool tmp_JumpToBatch = false;
 
 
 
@@ -53,6 +54,12 @@ namespace BBG.Slides
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (tmp_JumpToBatch)
+            {
+                AffairHandler.PageTo(5);
+                tmp_JumpToBatch = false;
+                return;
+            }
             AffairHandler.PageTo(3);
         }
 

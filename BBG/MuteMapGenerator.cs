@@ -104,6 +104,7 @@ namespace BBG
 
             });
             task1.Start();
+            task1.Wait();
         }
         public void Generate(ConciseBlockData3D[] blockDatas)
         {
@@ -155,6 +156,8 @@ namespace BBG
                 OnGenerateFinished();
             });
             task1.Start();
+            task1.Wait();
+
         }
 
         ConciseBlockData2D[] myblockDatas2D;

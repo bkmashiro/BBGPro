@@ -3,31 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace BBG
 {
     class BatchProcessing
     {
-        bool UseMask = false;
-        bool Is3D = false;
-        bool IsMultiThread = false;
-        bool UseLab = true;
+        public bool UseMask = false;
+        public bool Is3D = false;
+        public bool IsMultiThread = true;
+        public bool UseLab = true;
 
         int fileCounter = 0;
         string SavePath = "";
         string FileName = "batch_";
+
+        int MaxWork = 0;
+        int nowWork = 0;
 
         List<string> imgs = new List<string>();
 
         BlockInfoManager BlockInfoManager;
         Schematic Schematic = new Schematic();
         MuteGenerator MapGenerator = new MuteGenerator();
-        ImageService imageService = new ImageService();
+        public ImageService imageService = new ImageService();
         MaskOverride MaskOverride;
+
+        TextBlock overall_txt;
+        ProgressBar overall_progress;
 
         public void Init(string folder)
         {
 
+        }
+        public void BindCtrls(TextBlock t_overall, ProgressBar p_overall)
+        {
+            overall_txt = t_overall;
+            overall_progress = p_overall;
+        }
+        private void SetTask(int max)
+        {
+            MaxWork = max;
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                overall_progress.Visibility = Visibility.Visible;
+                overall_progress.Maximum = max;
+                overall_progress.Value = 0;
+            }));
+        }
+        private void TaskFinished()
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                overall_progress.Visibility = Visibility.Hidden;
+                overall_progress.Value = 0;
+            }));
+        }
+        private void UpdateTask(int progress)
+        {
+            Task t = new Task(new Action(() =>
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    overall_progress.Value = progress;
+                    overall_txt.Text = string.Format(
+                        Application.Current.FindResource("batch_overall_progress").ToString(),
+                        (nowWork / (float)MaxWork * 100).ToString("#0.00"),
+                        nowWork,
+                        MaxWork
+                        );
+                }));
+            }));
+            t.Start();
         }
 
         public void LoadSettings(AffairHandler af)
@@ -79,10 +127,20 @@ namespace BBG
         Work<string> DoWork;
         public void Process()
         {
-            for (int i = 0; i < imgs.Count; i++)
+            SetGenMode(Is3D, IsMultiThread, UseMask);
+            SetTask(imgs.Count);
+            Task task = new Task(new Action(() =>
             {
-                DoWork(imgs[i]);
-            }
+                for (int i = 0; i < imgs.Count; i++)
+                {
+                    DoWork(imgs[i]);
+                    nowWork = i + 1;
+                    UpdateTask(i + 1);
+                }
+                Task.Delay(50000);
+                TaskFinished();
+            }));
+            task.Start();
         }
         private void DoWork2D(string img)
         {

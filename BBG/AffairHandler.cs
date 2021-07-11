@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf.Transitions;
+﻿using BBG.Slides;
+using MaterialDesignThemes.Wpf.Transitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,11 @@ namespace BBG
         public Schematic Schematic;
         public Transitioner transitioner;
 
+        public ChooseColor chooseColor;
+
         public bool is3DMode;
         public bool isMultiThread=true;
+        public bool tmp_Jump2Batch = false;
         public void InitInput()
         {
             BlockInfoManager = new BlockInfoManager();

@@ -82,13 +82,19 @@
     <sys:String x:Key="exoprt_warn_ascii">Schematic文件文件名中不能出现中文！否则WorldEdit将无法识别！</sys:String>
     
     <sys:String x:Key="batch_title">批处理</sys:String>
-    <sys:String x:Key="batch_choose_color">选择颜色</sys:String>
+    <sys:String x:Key="batch_choose_color">2.(可选的)选择颜色</sys:String>
+    <sys:String x:Key="batch_choose_imgs">选择图像文件</sys:String>
+    <sys:String x:Key="batch_keying_color">蒙版颜色</sys:String>
+    
+    <sys:String x:Key="batch_choose_folder">选择文件夹</sys:String>
     <sys:String x:Key="batch_color_info">颜色已选择：{0}</sys:String>
     <sys:String x:Key="batch_color_default">颜色已选择：全部</sys:String>
-    <sys:String x:Key="batch_import">载入图片或选择文件夹</sys:String>
+    <sys:String x:Key="batch_import">1.载入图片或选择文件夹</sys:String>
     <sys:String x:Key="batch_3d_on">立体地图画模式：已开启</sys:String>
     <sys:String x:Key="batch_3d_off">立体地图画模式：关闭</sys:String>
     <sys:String x:Key="batch_color_space">色彩空间</sys:String>
     <sys:String x:Key="batch_dither">抖动模式</sys:String>
     <sys:String x:Key="batch_start_process">执行</sys:String>
+    <sys:String x:Key="batch_overall_progress">总进度({0}%)：{1}/{2}</sys:String>
+    <sys:String x:Key="batch_progress">目前任务进度({0}%)：{1}/{2}</sys:String>
 </ResourceDictionary>

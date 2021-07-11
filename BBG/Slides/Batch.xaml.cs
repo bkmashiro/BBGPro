@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -28,13 +29,11 @@ namespace BBG.Slides
 
         public AffairHandler AffairHandler { get; }
 
+        BatchProcessing batchProcessing = new BatchProcessing();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            BatchProcessing batchProcessing = new BatchProcessing();
-            batchProcessing.Init(new string[] { "mask_test.png" });
-            batchProcessing.SetGenMode(false, true, true);
-            batchProcessing.LoadSettings(AffairHandler);
-            batchProcessing.Process();
+            AffairHandler.PageTo(2);
+            AffairHandler.chooseColor.tmp_JumpToBatch = true;
         }
 
         private void cb2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -42,9 +41,83 @@ namespace BBG.Slides
 
         }
 
-        private void cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void toggle_Click(object sender, RoutedEventArgs e)
         {
+            //Already handled.
+        }
 
+        private void chooseFolder_Click(object sender, RoutedEventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.CheckFileExists = true;
+                ofd.CheckPathExists = true;
+                ofd.Multiselect = true;
+                ofd.Title = System.Windows.Application.Current.FindResource("batch_choose_imgs").ToString();
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    batchProcessing.Init(ofd.FileNames);
+                }
+            }
+        }
+
+        private void Process_Click(object sender, RoutedEventArgs e)
+        {
+            batchProcessing.SetGenMode(toggle.IsChecked ?? false, true, toggle2.IsChecked ?? false);
+            batchProcessing.LoadSettings(AffairHandler);
+            batchProcessing.BindCtrls(overall_progress, progress_bar);
+            batchProcessing.Process();
+        }
+
+        private void cb_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            int selectIndex = cb.SelectedIndex;
+            if (selectIndex == -1)
+            {
+                batchProcessing.imageService.UseDither = true;
+                batchProcessing.imageService.ditherType = 5;
+            }
+            else
+            {
+                if (selectIndex == 0)
+                {
+                    batchProcessing.imageService.UseDither = false;
+                    batchProcessing.imageService.ditherType = -1;
+                }
+                else
+                {
+                    batchProcessing.imageService.UseDither = true;
+                    batchProcessing.imageService.ditherType = selectIndex;
+                }
+            }
+        }
+
+        bool UseLab = true;
+        private void cb2_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            int selectIndex = cb2.SelectedIndex;
+            if (selectIndex == -1)
+            {
+                //默认 lab
+                UseLab = true;
+            }
+            else
+            {
+                if (selectIndex == 0)
+                {
+                    UseLab = true;
+                }
+                else
+                {
+                    UseLab = false;
+                }
+            }
+            batchProcessing.UseLab = UseLab;
+        }
+
+        private void toggle2_Click(object sender, RoutedEventArgs e)
+        {
+            batchProcessing.UseMask = toggle2.IsChecked ?? false;
         }
     }
 }
