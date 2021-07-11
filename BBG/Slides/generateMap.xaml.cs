@@ -138,5 +138,17 @@ namespace BBG.Slides
                 }
             }
         }
+
+        private void toggle2_Click(object sender, RoutedEventArgs e)
+        {
+            if (toggle2.IsChecked ?? true)
+            {
+                AffairHandler.IgnoreTransprant = true;
+            }
+            else
+            {
+                AffairHandler.IgnoreTransprant = false;
+            }
+        }
     }
 }

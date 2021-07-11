@@ -149,15 +149,15 @@ namespace BBG
 
         public ConciseBlockData2D[] GetConciseBlockData2D()
         {
-            ConciseBlockData2D[] conciseBlockData2Ds = new ConciseBlockData2D[colorCount];
+            List<ConciseBlockData2D> conciseBlockData2Ds = new List<ConciseBlockData2D>();
             for (int i = 0; i < blockDatas_higher.Count; i++)
             {
                 if (colorEnabled[i])
                 {
-                    conciseBlockData2Ds[i] = new ConciseBlockData2D(blockDatas_flat[i].classid, blockDatas_flat[i].RGBColor, blockDatas_flat[i].LabColor);
+                    conciseBlockData2Ds.Add(new ConciseBlockData2D(blockDatas_flat[i].classid, blockDatas_flat[i].RGBColor, blockDatas_flat[i].LabColor));
                 }
             }
-            return conciseBlockData2Ds;
+            return conciseBlockData2Ds.ToArray();
         }
 
         public ConciseBlockData3D[] GetConciseBlockData3D()

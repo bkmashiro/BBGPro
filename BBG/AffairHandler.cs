@@ -22,6 +22,7 @@ namespace BBG
         public bool is3DMode;
         public bool isMultiThread=true;
         public bool tmp_Jump2Batch = false;
+        public bool IgnoreTransprant = false;
         public void InitInput()
         {
             BlockInfoManager = new BlockInfoManager();

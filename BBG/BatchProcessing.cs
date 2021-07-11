@@ -176,7 +176,9 @@ namespace BBG
             MapGenerator.Multithread_Generate(BlockInfoManager.GetConciseBlockData3D());
             Save();
         }
-
+        public  byte r=0;
+        public  byte g=0;
+        public  byte b=0;
         private void Save()
         {
             var res = MapGenerator.result;
@@ -184,7 +186,7 @@ namespace BBG
             if (UseMask)
             {
                 MaskOverride.Init(res);
-                Schematic.ReadMask(MaskOverride.GetMaskedByColor(255, 255, 255));
+                Schematic.ReadMask(MaskOverride.GetMaskedByColor(r, g, b));
             }
             Schematic.Save((++fileCounter).ToString() + ".schem");
             //Schematic.Save($"{SavePath}{FileName}{fileCounter}.schem");

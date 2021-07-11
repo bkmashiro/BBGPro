@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BBG"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="BBG Pro"
         Height="800"
         Width="1200"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"

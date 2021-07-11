@@ -118,7 +118,8 @@
                                Margin="10,4,0,4"
                                HorizontalAlignment="Left"
                                Height="18"
-                               d:LayoutOverrides="HorizontalAlignment" />
+                               d:LayoutOverrides="HorizontalAlignment"
+                               Name="mbys"/>
                     <ToggleButton Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                                   IsChecked="False"
                                   HorizontalAlignment="Right"
@@ -129,15 +130,20 @@
                                   VerticalAlignment="Top"
                                   Height="25"
                                   RenderTransformOrigin="0.5,0.5"></ToggleButton>
-                    <ComboBox HorizontalAlignment="Right"
-                              Width="202"
-                              Margin="100,0,0,0"
-                              SelectionChanged="cb2_SelectionChanged"
-                              Height="27"
-                              IsEnabled="{Binding ElementName=toggle2,Path=IsChecked}">
-                        <ComboBoxItem Content="{DynamicResource gen_color_space_lab}" />
-                        <ComboBoxItem Content="{DynamicResource gen_color_space_rgb}" />
-                    </ComboBox>
+                    <Button HorizontalAlignment="Right"
+                            Width="202"
+                            Margin="100,0,0,0"
+                            Click="Button_Click_1"
+                            Height="27"
+                            IsEnabled="{Binding ElementName=toggle2,Path=IsChecked}"
+                            Content="{DynamicResource batch_choose_mask_color}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"></Button>
+                    <Rectangle x:Name="color_rec"
+                               Margin="0,4,250,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Width="{Binding ElementName=mbys,Path=Height}"
+                               Height="{Binding ElementName=mbys,Path=Height}"/>
                 </Grid>
             </StackPanel>
         </Expander>
@@ -163,6 +169,6 @@
                      VerticalAlignment="Bottom"
                      Grid.Row="1"
                      d:LayoutOverrides="VerticalAlignment"
-                     Visibility="Hidden"/>
+                     Visibility="Hidden" />
     </Grid>
 </Page>

@@ -192,6 +192,10 @@ namespace BBG
             {
                 //3D
                 //更高
+                colorBuffer[0] = new byte[BlockInfoManager.colorEnabled.Length][];//length个方块
+
+                colorBuffer[2] = new byte[BlockInfoManager.colorEnabled.Length][];//length个方块
+
                 for (int i = 0; i < BlockInfoManager.colorEnabled.Length; i++)
                 {
                     if (BlockInfoManager.colorEnabled[i])
@@ -220,7 +224,7 @@ namespace BBG
                     {
                         for (int channel = 0; channel < 3; channel++)
                         {
-                            buffer[x * height * 3 + height * 3 + channel] = colorBuffer[h[x,y]][result[x, y]][channel];
+                            buffer[x * height * 3 + y * 3 + channel] = colorBuffer[h[x,y]][result[y, x]][channel];
                         }
                     }
                 }

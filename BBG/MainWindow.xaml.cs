@@ -201,9 +201,10 @@ namespace BBG
                 try
                 {
                     string updateString = @"https://gitee.com/bakamashiro/bbg-pro-update/raw/master/bbgupdate.txt";
-                    WebClient webClient = new WebClient();
-                    webClient.Encoding = System.Text.Encoding.UTF8;
-                    string datas = webClient.DownloadString(updateString);
+                    WebClient wc = new WebClient();
+                    Stream s = wc.OpenRead(updateString);
+                    StreamReader sr = new StreamReader(s, Encoding.UTF8);
+                    string datas = sr.ReadToEnd();
                     string[] data = datas.Split('\r');
                     string ver = data[1].Trim().Split(':')[1].Trim();
                     string link = data[2].Trim().Split(':')[1].Trim();
@@ -228,13 +229,11 @@ namespace BBG
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show($"看起来BBG Pro更新服务遇到了问题。Error:{ex.Message}");
+                    System.Windows.Forms.MessageBox.Show($"看起来BBG Pro更新服务遇到了问题。Error:{ex.Message} 我们的主页：bakamashiro.xyz  Github:github.com/bkmashiro/BBGPro");
                     throw;
                 }
             }));
             t.Start();
-        }
-
-        
+        }       
     }
 }

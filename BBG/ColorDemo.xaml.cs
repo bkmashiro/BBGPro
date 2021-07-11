@@ -33,8 +33,8 @@ namespace BBG
             {
                 loadImgs(index);
 
-                var c = affairHandler.BlockInfoManager.blockDatas_higher[index].RGBColor.ToColor();
-                App.Current.Dispatcher.Invoke(new Action(() =>
+                System.Drawing.Color c = affairHandler.BlockInfoManager.blockDatas_higher[index].RGBColor.ToColor();
+                Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     color_name.Background = new SolidColorBrush(Color.FromRgb(c.R, c.G, c.B));
                     color_name.Text = ToHTMLColorCode(c);
@@ -87,6 +87,8 @@ namespace BBG
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
             image.Tag = counter++;
             image.MouseDown += Image_MouseDown;
+            image.ToolTip = System.IO.Path.GetFileNameWithoutExtension(imageName[imgLoaded]);
+
             Image_holder.Children.Add(image);
 
             if (imgLoaded < imageName.Count - 1)

@@ -119,5 +119,24 @@ namespace BBG.Slides
         {
             batchProcessing.UseMask = toggle2.IsChecked ?? false;
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            using (ColorDialog colorDialog = new ColorDialog())
+            {
+                colorDialog.AllowFullOpen = true;
+                colorDialog.FullOpen = true;
+                colorDialog.ShowHelp = true;
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    SolidColorBrush solidColorBrush = new SolidColorBrush();
+                    solidColorBrush.Color = Color.FromRgb(colorDialog.Color.R,colorDialog.Color.G,colorDialog.Color.B);
+                    color_rec.Fill = solidColorBrush;
+                    batchProcessing.r = colorDialog.Color.R;
+                    batchProcessing.g = colorDialog.Color.G;
+                    batchProcessing.b = colorDialog.Color.B;
+                }
+            }
+        }
     }
 }

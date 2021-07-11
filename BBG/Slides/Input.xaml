@@ -16,18 +16,21 @@
       TextOptions.TextRenderingMode="Auto"
       Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
-        <Grid 
-                   HorizontalAlignment="Left"
-                   Height="256"
-                   Margin="10,53,0,0"
-                   VerticalAlignment="Top"
-                   Width="256"
-                   Drop="Rectangle_Drop"
+        <Grid HorizontalAlignment="Left"
+              Height="256"
+              Margin="10,53,0,0"
+              VerticalAlignment="Top"
+              Width="256"
+              Drop="image_Drop"
+              AllowDrop="True"
+              DragEnter="image_DragEnter"
+              DragLeave="image_DragLeave"
               Background="#FFC2DAF7">
             <TextBlock Text="{DynamicResource input_drop}"
                        VerticalAlignment="Center"
                        Margin="0"
-                       HorizontalAlignment="Center" />
+                       HorizontalAlignment="Center"
+                       Name="drop_txt" />
         </Grid>
         <TextBlock HorizontalAlignment="Left"
                    Margin="10,10,0,0"
@@ -42,8 +45,10 @@
                VerticalAlignment="Top"
                Width="256"
                x:Name="image"
-               Drop="image_Drop" />
-
+               Drop="image_Drop"
+               AllowDrop="True"
+               DragEnter="image_DragEnter"
+               DragLeave="image_DragLeave" />
         <Button Style="{StaticResource MaterialDesignIconButton}"
                 ToolTip="{DynamicResource input_btn}"
                 Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
@@ -78,6 +83,6 @@
                    VerticalAlignment="Bottom"
                    Width="243"
                    Height="40"
-                   Name="imageInfo"/>
+                   Name="imageInfo" />
     </Grid>
 </Page>

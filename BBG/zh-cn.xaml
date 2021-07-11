@@ -22,6 +22,9 @@
     <sys:String x:Key="input_btn">点击导入</sys:String>
     <sys:String x:Key="input_dispose_btn">点击移除</sys:String>
     <sys:String x:Key="input_drop">拖放图片或点击下方加号</sys:String>
+    <sys:String x:Key="input_not_a_image">拖入的内容不是文件！</sys:String>
+    <sys:String x:Key="input_is_a_image">松开鼠标</sys:String>
+    
     <sys:String x:Key="input_done">选好了！</sys:String>
 
     
@@ -44,6 +47,8 @@
     <sys:String x:Key="gen_color_space_hint">建议不改（使用Lab色彩空间）</sys:String>
     <sys:String x:Key="gen_color_space_lab">使用Lab色彩空间</sys:String>
     <sys:String x:Key="gen_color_space_rgb">使用RGB色彩空间</sys:String>
+    <sys:String x:Key="gen_color_ingnore_transprant">忽略完全透明像素（实验性功能）</sys:String>
+    
     
     <sys:String x:Key="gen_advanced_Config">高级设置</sys:String>
     <sys:String x:Key="gen_dither_type">抖动模式</sys:String>
@@ -80,6 +85,7 @@
     <sys:String x:Key="preview_progress_saving">编码并写入磁盘（这可能需要一段时间）</sys:String>
     <sys:String x:Key="preview_progress_finished">完成</sys:String>
     <sys:String x:Key="exoprt_warn_ascii">Schematic文件文件名中不能出现中文！否则WorldEdit将无法识别！</sys:String>
+    <sys:String x:Key="exoprt_warn_ascii_error">进度终止</sys:String>
     
     <sys:String x:Key="batch_title">批处理</sys:String>
     <sys:String x:Key="batch_choose_color">2.(可选的)选择颜色</sys:String>
@@ -89,7 +95,7 @@
     <sys:String x:Key="batch_choose_folder">选择文件夹</sys:String>
     <sys:String x:Key="batch_color_info">颜色已选择：{0}</sys:String>
     <sys:String x:Key="batch_color_default">颜色已选择：全部</sys:String>
-    <sys:String x:Key="batch_import">1.载入图片或选择文件夹</sys:String>
+    <sys:String x:Key="batch_import">1.载入图片（按住ctrl/shift可多选）</sys:String>
     <sys:String x:Key="batch_3d_on">立体地图画模式：已开启</sys:String>
     <sys:String x:Key="batch_3d_off">立体地图画模式：关闭</sys:String>
     <sys:String x:Key="batch_color_space">色彩空间</sys:String>
@@ -97,4 +103,6 @@
     <sys:String x:Key="batch_start_process">执行</sys:String>
     <sys:String x:Key="batch_overall_progress">总进度({0}%)：{1}/{2}</sys:String>
     <sys:String x:Key="batch_progress">目前任务进度({0}%)：{1}/{2}</sys:String>
+    <sys:String x:Key="batch_choose_mask_color">选择蒙版颜色</sys:String>
+    
 </ResourceDictionary>

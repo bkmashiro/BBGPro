@@ -143,6 +143,7 @@ namespace BBG.Slides
                             if (item > 128)
                             {
                                 System.Windows.Forms.MessageBox.Show(System.Windows.Application.Current.FindResource("exoprt_warn_ascii").ToString());
+                                TextTo(System.Windows.Application.Current.FindResource("exoprt_warn_ascii_error").ToString());
                                 return;
                             }
                         }
@@ -253,14 +254,14 @@ namespace BBG.Slides
             {
                 if (AffairHandler.mapGenerator.blockUsage[i] != 0)
                 {
-                    if (!names.Contains(conciseBlockData2D[i].classId))
+                    if (!names.Contains(AffairHandler.BlockInfoManager.blockDatas_higher[i].classid))
                     {
-                        names.Add(conciseBlockData2D[i].classId);
+                        names.Add(AffairHandler.BlockInfoManager.blockDatas_higher[i].classid);
                         counts.Add(AffairHandler.mapGenerator.blockUsage[i]);
                     }
                     else
                     {
-                        counts[names.Find(o => o == conciseBlockData2D[i].classId)] += AffairHandler.mapGenerator.blockUsage[i];
+                        counts[names.Find(o => o == AffairHandler.BlockInfoManager.blockDatas_higher[i].classid)] += AffairHandler.mapGenerator.blockUsage[i];
                     }
                 }
             }

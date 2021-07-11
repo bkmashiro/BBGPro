@@ -38,7 +38,25 @@ namespace BBG.Slides
 
         private void image_Drop(object sender, System.Windows.DragEventArgs e)
         {
-
+            System.Array array = e.Data.GetData(System.Windows.DataFormats.FileDrop) as Array;
+            string fileName = array.GetValue(0).ToString();
+            myfileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    System.Drawing.Image im = System.Drawing.Image.FromStream(fs);
+                    image.Source = new BitmapImage(new Uri(fileName, UriKind.Absolute));
+                    filePath = fileName;
+                    width = im.Width;
+                    height = im.Height;
+                    imageInfo.Text = $"{width}px*{height}px";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"ERROR 读取图片的异常：{ex.Message} (兄啊，这是图片吗？)");
+            }
         }
 
         private void disposeImg_Click(object sender, RoutedEventArgs e)
@@ -65,23 +83,23 @@ namespace BBG.Slides
                 openFileDialog.Multiselect = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = openFileDialog.FileName;
-                    myfileName = System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileName) ;
+                    string fileName = openFileDialog.FileName;
                     try
                     {
-                        image.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
-                        using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                        using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                         {
-                            System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-                            width = image.Width;
-                            height = image.Height;
+                            System.Drawing.Image im = System.Drawing.Image.FromStream(fs);
+                            image.Source = new BitmapImage(new Uri(fileName, UriKind.Absolute));
+                            filePath = fileName;
+                            myfileName = System.IO.Path.GetFileNameWithoutExtension(openFileDialog.FileName);
+                            width = im.Width;
+                            height = im.Height;
                             imageInfo.Text = $"{width}px*{height}px";
                         }
                     }
                     catch (Exception ex)
                     {
                         System.Windows.Forms.MessageBox.Show($"ERROR 读取图片的异常：{ex.Message}");
-                        throw;
                     }
                 }
             }
@@ -100,6 +118,28 @@ namespace BBG.Slides
                 System.Windows.Forms.MessageBox.Show("请正确选择图片！");
             }
 
+        }
+
+        private void image_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                e.Effects = System.Windows.DragDropEffects.Link;
+                drop_txt.Background = System.Windows.Media.Brushes.Transparent;
+                drop_txt.Text = System.Windows.Application.Current.FindResource("input_is_a_image").ToString();
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+                drop_txt.Background = System.Windows.Media.Brushes.Red;
+                drop_txt.Text = System.Windows.Application.Current.FindResource("input_not_a_image").ToString();
+            }
+        }
+
+        private void image_DragLeave(object sender, System.Windows.DragEventArgs e)
+        {
+            drop_txt.Background = System.Windows.Media.Brushes.Transparent;
+            drop_txt.Text = System.Windows.Application.Current.FindResource("input_drop").ToString();
         }
     }
 }

@@ -138,7 +138,7 @@ namespace BBG
             {
                 tb1.Text = String.Format(str1, str4);
             }));
-            blockUsage = new int[blockDatas.Length];
+            blockUsage = new int[AffairHandler.BlockInfoManager.blockDatas_higher.Count];
 
             var task1 = new Task(() =>
             {
@@ -191,7 +191,7 @@ namespace BBG
             {
                 tb1.Text = String.Format(str1, str4);
             }));
-            blockUsage = new int[blockDatas.Length];
+            blockUsage = new int[AffairHandler.BlockInfoManager.blockDatas_higher.Count];
             var task1 = new Task(() =>
             {
                 if (Mapping == null)
@@ -255,7 +255,7 @@ namespace BBG
                 tb1.Text = string.Format(str1, str4);
             }));
             myblockDatas2D = blockDatas;
-            blockUsage = new int[blockDatas.Length];
+            blockUsage = new int[AffairHandler.BlockInfoManager.blockDatas_higher.Count];
             stopwatch.Start();
             var task1 = new Task(() =>
             {
@@ -278,7 +278,7 @@ namespace BBG
                 tb1.Text = String.Format(str1, str4);
             }));
             myblockDatas3D = blockDatas;
-            blockUsage = new int[blockDatas.Length];
+            blockUsage = new int[AffairHandler.BlockInfoManager.blockDatas_higher.Count];
 
             var task1 = new Task(() =>
             {
@@ -399,6 +399,10 @@ namespace BBG
 
         private void OnGenerateFinished()
         {
+            if (AffairHandler.IgnoreTransprant)
+            {
+
+            }
             tb1.Dispatcher.Invoke(new Action(() =>
             {
                 tb1.Text = string.Format(str1, str5);

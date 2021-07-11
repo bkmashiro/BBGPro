@@ -42,7 +42,9 @@
                        Grid.Row="0"
                        VerticalAlignment="Top"
                        Height="17"
-                       Width="94" />
+                       Width="94" 
+                       Name="color_count_txt"
+                       Visibility="Collapsed"/>
             <Button Style="{StaticResource MaterialDesignOutlinedButton}"
                     Content="{DynamicResource gen_goto_color}"
                     Grid.Row="0"
@@ -58,7 +60,8 @@
                        Margin="10,0,0,15.333"
                        Width="117"
                        d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin"
-                       Name="txt_Is3dEnabled" />
+                       Name="txt_Is3dEnabled"
+                       VerticalAlignment="Top" />
             <ToggleButton Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
                           IsChecked="False"
                           Grid.Row="1"
@@ -67,7 +70,8 @@
                           Width="34"
                           d:LayoutOverrides="LeftMargin, RightMargin"
                           Click="ToggleButton_Click"
-                          Name="toggle" />
+                          Name="toggle"
+                          VerticalAlignment="Top" />
             <StackPanel Grid.Row="2"
                         Margin="0,-0.333,0,0.333"
                         d:LayoutOverrides="LeftMargin, RightMargin">
@@ -117,6 +121,21 @@
                                 <ComboBoxItem Content="{DynamicResource gen_color_space_lab}" />
                                 <ComboBoxItem Content="{DynamicResource gen_color_space_rgb}" />
                             </ComboBox>
+                        </Grid>
+                        <Grid Height="26"
+                              Margin="0,0,0.333,0">
+                            <TextBlock Text="{DynamicResource gen_color_ingnore_transprant}"
+                                       Margin="10,0,0,0"
+                                       HorizontalAlignment="Left"
+                                       Width="336"
+                                       Height="18" />
+                            <ToggleButton Style="{StaticResource MaterialDesignSwitchLightToggleButton}"
+                                          IsChecked="False"
+                                          HorizontalAlignment="Right"
+                                          Margin="0,-1,0,0"
+                                          Width="34"
+                                          Click="toggle2_Click"
+                                          Name="toggle2" />
                         </Grid>
                     </StackPanel>
                 </Expander>
