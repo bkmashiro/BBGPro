@@ -272,6 +272,7 @@ namespace BBG.Slides
             }
 
 
+
             cnt_txt.Text = sb.ToString();
             cnt_txt2.Text = sb2.ToString();
         }
